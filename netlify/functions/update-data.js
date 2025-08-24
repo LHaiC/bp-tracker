@@ -1,26 +1,24 @@
-// netlify/functions/update-data.js
+// netlify/functions/update-data.js (完整代码)
 const { Octokit } = require("@octokit/rest");
 
-// 定义一个 headers 对象，用于允许跨域请求
+// 定义 headers，用于允许来自 GitHub Pages 的跨域请求
 const headers = {
-  'Access-Control-Allow-Origin': '*', // 允许任何来源的请求，对于个人项目是安全的
+  'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS' // 允许的方法
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
 exports.handler = async function(event, context) {
-  // 浏览器在发送 POST 请求前，会先发送一个 OPTIONS "预检"请求，我们必须正确响应它
+  // 响应浏览器的 OPTIONS "预检"请求
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 204, // No Content
-      headers
-    };
+    return { statusCode: 204, headers };
   }
 
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, headers, body: "Method Not Allowed" };
   }
 
+  // 从环境变量中同时获取 GITHUB_TOKEN 和 BP_PASSWORD
   const { GITHUB_TOKEN, BP_PASSWORD } = process.env;
 
   if (!GITHUB_TOKEN || !BP_PASSWORD) {
@@ -30,20 +28,21 @@ exports.handler = async function(event, context) {
   
   const GITHUB_OWNER = 'LHaiC'; // 已根据你的截图自动填入
   const GITHUB_REPO = "bp-tracker";
-
-  const octokit = new Octokit({ auth: GITHUB_TOKEN });
   const DATA_FILE_PATH = 'blood_pressure_data.json';
   
   const newRecord = JSON.parse(event.body);
 
+  // --- 新增: 密码验证逻辑 ---
   if (newRecord.password !== BP_PASSWORD) {
     return {
-      statusCode: 401,
+      statusCode: 401, // 401 Unauthorized
       headers,
       body: JSON.stringify({ message: "密码错误，禁止访问。" })
     };
   }
+  // --- 密码验证结束 ---
 
+  // 从记录中删除密码，我们绝不把密码存入JSON文件
   delete newRecord.password;
 
   try {

@@ -1,9 +1,12 @@
+<!-- index.html (完整代码) -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的血压记录 (BP Tracker)</title>
+    <!-- 新增: 引入 Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -32,10 +35,22 @@
                     <label for="notes">备注 (可选)</label>
                     <textarea id="notes" rows="3" placeholder="例如: 早上起床后测量"></textarea>
                 </div>
+                
+                <!-- 新增: 密码输入框 -->
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" placeholder="请输入密码以保存" required>
+                </div>
 
                 <button type="submit" id="submit-btn">保存记录</button>
             </form>
             <p id="status-message"></p>
+        </div>
+
+        <!-- 新增: 图表功能的容器 -->
+        <div id="chart-container" class="card">
+            <h2>血压趋势图</h2>
+            <canvas id="bpChart"></canvas>
         </div>
 
         <div id="data-container" class="card">

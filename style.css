@@ -77,3 +77,8 @@ th {
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+#chart-container {
+    position: relative;
+    height: 40vh; /* 设置图表容器的高度 */
+    min-height: 300px;
+}
