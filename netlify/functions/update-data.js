@@ -13,7 +13,7 @@ exports.handler = async function(event, context) {
   }
   
   // ****** 在这里修改成你自己的信息 ******
-  const GITHUB_OWNER = "[你的GitHub用户名]";
+  const GITHUB_OWNER = "LHaiC";
   const GITHUB_REPO = "bp-tracker";
   // ************************************
 
