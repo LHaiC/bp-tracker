@@ -1,3 +1,17 @@
+# netlify.toml (完整更新版)
+
+# 这是“构建”部分的配置
+[build]
+  # 构建命令: 在部署前，先运行 npm install 来安装函数的依赖 (@octokit/rest)
+  command = "npm install"
+  
+  # 发布目录: 告诉 Netlify 你的网站文件 (index.html 等) 在仓库的根目录
+  publish = "."
+  
+  # 函数目录: 明确告诉 Netlify 你的无服务器函数代码放在哪里
+  functions = "netlify/functions"
+
+# 这是“函数”部分的通用配置
 [functions]
-  directory = "netlify/functions/"
+  # 指定打包工具，esbuild 速度很快
   node_bundler = "esbuild"
