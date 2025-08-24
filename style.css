@@ -37,3 +37,24 @@ th { background-color: #ecf0f1; font-weight: bold; }
 .info-card { font-size: 14px; line-height: 1.6; }
 .info-card ul { padding-left: 20px; margin-top: 5px; }
 .info-card .disclaimer { font-size: 12px; color: #7f8c8d; margin-top: 20px; border-top: 1px solid #ecf0f1; padding-top: 15px; }
+
+/* --- 页脚样式 --- */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #7f8c8d; /* 一种柔和的灰色 */
+}
+
+footer a {
+    color: #3498db; /* 与按钮颜色保持一致 */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
