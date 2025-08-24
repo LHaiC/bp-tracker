@@ -1,4 +1,4 @@
-/* style.css (最终完美版) */
+/* style.css */
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 20px; }
 .container { max-width: 800px; margin: 0 auto; }
 h1, h2 { color: #2c3e50; text-align: center; }
@@ -31,9 +31,9 @@ th { background-color: #ecf0f1; font-weight: bold; }
 .color-box { width: 15px; height: 15px; border: 1px solid #ccc; margin-right: 8px; }
 
 /* --- 核心修改：从行颜色改为单元格颜色 --- */
-.bp-normal { background-color: #e8f5e9 !important; } /* !important 确保覆盖默认样式 */
-.bp-elevated { background-color: #fff3e0 !important; }
-.bp-high { background-color: #ffebee !important; }
+.bp-normal { background-color: #e8f5e9; }
+.bp-elevated { background-color: #fff3e0; }
+.bp-high { background-color: #ffebee; }
 
 .info-card { font-size: 14px; line-height: 1.6; }
 .info-card ul { padding-left: 20px; margin-top: 5px; }

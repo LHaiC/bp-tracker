@@ -1,4 +1,4 @@
-// netlify/functions/update-data.js (最终修复版)
+// netlify/functions/update-data.js
 const { Octokit } = require("@octokit/rest"); // 确保这行代码在最上面，且完全正确
 
 // 定义 headers，用于允许来自 GitHub Pages 的跨域请求

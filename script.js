@@ -1,19 +1,16 @@
-// script.js (最终完美版 - 修复图表并添加所有功能)
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
     const GITHUB_OWNER = 'LHaiC';
     const GITHUB_REPO = 'bp-tracker';
     const NETLIFY_FUNCTION_URL = 'https://clever-bublanina-226ced.netlify.app/.netlify/functions/update-data';
     const dataFilePath = 'blood_pressure_data.json';
-
     const bpForm = document.getElementById('bp-form');
     const statusMessage = document.getElementById('status-message');
     const bpHistory = document.getElementById('bp-history');
     const submitBtn = document.getElementById('submit-btn');
     const refreshBtn = document.getElementById('refresh-btn');
-    
     let myChart = null;
 
-    // --- 核心修改：判断函数现在只返回类名 ---
     function getSystolicLevel(systolic) {
         if (systolic >= 140) return 'bp-high';
         if (systolic >= 130) return 'bp-elevated';
@@ -33,37 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const systolicData = reversedData.map(d => d.systolic);
         const diastolicData = reversedData.map(d => d.diastolic);
         const pulseData = reversedData.map(d => d.pulse);
-
         myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: '收缩压 (高压)', data: systolicData, borderColor: 'rgba(255, 99, 132, 1)', tension: 0.1, yAxisID: 'y' },
-                    { label: '舒张压 (低压)', data: diastolicData, borderColor: 'rgba(54, 162, 235, 1)', tension: 0.1, yAxisID: 'y' },
-                    { label: '心率', data: pulseData, borderColor: 'rgba(75, 192, 192, 1)', tension: 0.1, yAxisID: 'yPulse', hidden: true }
-                ]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: {
-                    y: { min: 50, max: 180, title: { display: true, text: '血压 (mmHg)' } },
-                    yPulse: { position: 'right', min: 40, max: 120, title: { display: true, text: '心率 (次/分)' }, grid: { drawOnChartArea: false }, }
-                },
-                plugins: {
-                    // --- 核心修改：分开绘制收缩压和舒张压的参考线 ---
-                    annotation: {
-                        annotations: {
-                            // 收缩压参考线
-                            systolicHigh: { type: 'line', yMin: 140, yMax: 140, borderColor: 'rgba(255, 99, 132, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '高压-高', position: 'end', backgroundColor: 'rgba(255, 99, 132, 0.5)', color: 'white', font: { size: 10 } } },
-                            systolicElevated: { type: 'line', yMin: 130, yMax: 130, borderColor: 'rgba(255, 159, 64, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '高压-较高', position: 'end', backgroundColor: 'rgba(255, 159, 64, 0.5)', color: 'white', font: { size: 10 } } },
-                            // 舒张压参考线
-                            diastolicHigh: { type: 'line', yMin: 90, yMax: 90, borderColor: 'rgba(54, 162, 235, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '低压-高', position: 'end', backgroundColor: 'rgba(54, 162, 235, 0.5)', color: 'white', font: { size: 10 } } },
-                            diastolicElevated: { type: 'line', yMin: 80, yMax: 80, borderColor: 'rgba(75, 192, 192, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '低压-较高', position: 'end', backgroundColor: 'rgba(75, 192, 192, 0.5)', color: 'white', font: { size: 10 } } }
-                        }
-                    }
-                }
-            }
+            type: 'line', data: { labels: labels, datasets: [ { label: '收缩压 (高压)', data: systolicData, borderColor: 'rgba(255, 99, 132, 1)', tension: 0.1, yAxisID: 'y' }, { label: '舒张压 (低压)', data: diastolicData, borderColor: 'rgba(54, 162, 235, 1)', tension: 0.1, yAxisID: 'y' }, { label: '心率', data: pulseData, borderColor: 'rgba(75, 192, 192, 1)', tension: 0.1, yAxisID: 'yPulse', hidden: true } ] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 50, max: 180, title: { display: true, text: '血压 (mmHg)' } }, yPulse: { position: 'right', min: 40, max: 120, title: { display: true, text: '心率 (次/分)' }, grid: { drawOnChartArea: false }, } }, plugins: { annotation: { annotations: { systolicHigh: { type: 'line', yMin: 140, yMax: 140, borderColor: 'rgba(255, 99, 132, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '高压-高', position: 'end', backgroundColor: 'rgba(255, 99, 132, 0.5)', color: 'white', font: { size: 10 } } }, systolicElevated: { type: 'line', yMin: 130, yMax: 130, borderColor: 'rgba(255, 159, 64, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '高压-较高', position: 'end', backgroundColor: 'rgba(255, 159, 64, 0.5)', color: 'white', font: { size: 10 } } }, diastolicHigh: { type: 'line', yMin: 90, yMax: 90, borderColor: 'rgba(54, 162, 235, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '低压-高', position: 'end', backgroundColor: 'rgba(54, 162, 235, 0.5)', color: 'white', font: { size: 10 } } }, diastolicElevated: { type: 'line', yMin: 80, yMax: 80, borderColor: 'rgba(75, 192, 192, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '低压-较高', position: 'end', backgroundColor: 'rgba(75, 192, 192, 0.5)', color: 'white', font: { size: 10 } } } } } } }
         });
     }
 
@@ -83,21 +52,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             data.forEach(record => {
-                const row = document.createElement('tr');
-                // --- 核心修改：独立判断每个单元格的颜色 ---
+                const row = bpHistory.insertRow(); // 使用更稳健的 insertRow 方法
+                
                 const systolicClass = getSystolicLevel(record.systolic);
                 const diastolicClass = getDiastolicLevel(record.diastolic);
+                
+                // 依次插入每个单元格，并设置内容和类
+                row.insertCell(0).textContent = record.dateTime;
+                const systolicCell = row.insertCell(1);
+                systolicCell.textContent = record.systolic;
+                systolicCell.className = systolicClass;
 
-                // 使用模板字符串来构建表格行，并为单元格添加类
-                row.innerHTML = `
-                    <td>${record.dateTime}</td>
-                    <td class="${systolicClass}">${record.systolic}</td>
-                    <td class="${diastolicClass}">${record.diastolic}</td>
-                    <td>${record.pulse || 'N/A'}</td>
-                    <td>${record.notes || ''}</td>
-                `;
-                bpHistory.appendChild(row);
+                const diastolicCell = row.insertCell(2);
+                diastolicCell.textContent = record.diastolic;
+                diastolicCell.className = diastolicClass;
+
+                row.insertCell(3).textContent = record.pulse || 'N/A';
+                row.insertCell(4).textContent = record.notes || '';
             });
+
             renderChart(data);
         } catch (error) {
             console.error('加载历史数据出错:', error);
