@@ -14,10 +14,10 @@ button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
 
 /* --- 核心修改：修复图表高度溢出问题 --- */
 #chart-container {
-    position: relative;
-    /* 我们不再固定高度，而是让它自适应，同时给一个最大高度 */
-    max-height: 1000px; 
-    padding-bottom: 10px; /* 增加一点内边距，让图表底部有呼吸空间 */
+    position: relative; /* 这是一个好习惯，用于定位内部元素 */
+    height: 400px;      /* 我们给它一个固定的、合理的高度 */
+    padding: 15px;      /* 增加一些内边距，让图表有呼吸空间 */
+    overflow: hidden; 
 }
 
 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
