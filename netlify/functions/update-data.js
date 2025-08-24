@@ -1,7 +1,6 @@
-// netlify/functions/update-data.js
-const { Octokit } = require("@octokit/rest"); // 确保这行代码在最上面，且完全正确
+// netlify/functions/update-data.js (最终版)
+const { Octokit } = require("@octokit/rest");
 
-// 定义 headers，用于允许来自 GitHub Pages 的跨域请求
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
@@ -28,17 +27,12 @@ exports.handler = async function(event, context) {
   const GITHUB_REPO = "bp-tracker";
   const DATA_FILE_PATH = 'blood_pressure_data.json';
   
-  // 在这里创建 octokit 实例
   const octokit = new Octokit({ auth: GITHUB_TOKEN });
   
   const newRecord = JSON.parse(event.body);
 
   if (newRecord.password !== BP_PASSWORD) {
-    return {
-      statusCode: 401,
-      headers,
-      body: JSON.stringify({ message: "密码错误，禁止访问。" })
-    };
+    return { statusCode: 401, headers, body: JSON.stringify({ message: "密码错误，禁止访问。" }) };
   }
 
   delete newRecord.password;
@@ -57,17 +51,9 @@ exports.handler = async function(event, context) {
       sha: fileData.sha,
     });
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ message: "数据保存成功！" }),
-    };
+    return { statusCode: 200, headers, body: JSON.stringify({ message: "数据保存成功！" }) };
   } catch (error) {
     console.error("Error updating data:", error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ message: `保存数据时出错: ${error.message}` }),
-    };
+    return { statusCode: 500, headers, body: JSON.stringify({ message: `保存数据时出错: ${error.message}` }) };
   }
 };

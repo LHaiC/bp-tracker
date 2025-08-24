@@ -1,9 +1,9 @@
-/* style.css */
+/* style.css (最终完美版 - 滚动图表) */
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 20px; }
 .container { max-width: 800px; margin: 0 auto; }
 h1, h2 { color: #2c3e50; text-align: center; }
 h3 { color: #34495e; margin-top: 0; }
-.card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; }
+.card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; box-sizing: border-box; }
 .form-group { margin-bottom: 15px; }
 label { display: block; font-weight: bold; margin-bottom: 5px; }
 input[type="number"], input[type="password"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
@@ -12,29 +12,28 @@ button:hover { background-color: #2980b9; }
 button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
 #status-message { text-align: center; margin-top: 15px; font-weight: bold; }
 
-#chart-container {
-    position: relative;
-    width: 100%; /* 确保容器宽度是响应式的 */
-    aspect-ratio: 16 / 9; /* 设置一个 16:9 的黄金比例，你可以根据喜好调整为 2 / 1 等 */
-    padding: 15px;
-    box-sizing: border-box; /* 确保内边距不会影响最终尺寸 */
+/* --- 核心修复：图表滚动容器 --- */
+#chart-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;   /* 关键：允许内容横向滚动 */
+    overflow-y: hidden;
+    padding-bottom: 10px; /* 为滚动条留出空间 */
 }
+/* 我们在JS中动态设置canvas父容器的宽高，所以这里不需要额外样式 */
+
 
 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-th, td { border: 1px solid #ddd; padding: 12px; text-align: center; vertical-align: middle; } /* 文本居中 */
+th, td { border: 1px solid #ddd; padding: 12px; text-align: center; vertical-align: middle; }
 th { background-color: #ecf0f1; font-weight: bold; }
 .header-with-button { display: flex; justify-content: space-between; align-items: center; }
 .header-with-button h2 { margin: 0; }
 #refresh-btn { width: auto; padding: 8px 15px; font-size: 14px; }
-#legend-container { display: flex; justify-content: center; gap: 20px; margin-top: 20px; font-size: 14px; } /* 图例居中 */
+#legend-container { display: flex; justify-content: center; gap: 20px; margin-top: 20px; font-size: 14px; }
 .legend-item { display: flex; align-items: center; }
 .color-box { width: 15px; height: 15px; border: 1px solid #ccc; margin-right: 8px; }
-
-/* --- 核心修改：从行颜色改为单元格颜色 --- */
 .bp-normal { background-color: #e8f5e9; }
 .bp-elevated { background-color: #fff3e0; }
 .bp-high { background-color: #ffebee; }
-
 .info-card { font-size: 14px; line-height: 1.6; }
 .info-card ul { padding-left: 20px; margin-top: 5px; }
 .info-card .disclaimer { font-size: 12px; color: #7f8c8d; margin-top: 20px; border-top: 1px solid #ecf0f1; padding-top: 15px; }
