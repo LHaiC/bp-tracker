@@ -13,9 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let myChart = null;
 
-    function getBloodPressureLevel(systolic, diastolic) {
-        if (systolic >= 140 || diastolic >= 90) return 'bp-high';
-        if (systolic >= 130 || diastolic >= 80) return 'bp-elevated';
+    // --- 核心修改：判断函数现在只返回类名 ---
+    function getSystolicLevel(systolic) {
+        if (systolic >= 140) return 'bp-high';
+        if (systolic >= 130) return 'bp-elevated';
+        return 'bp-normal';
+    }
+    function getDiastolicLevel(diastolic) {
+        if (diastolic >= 90) return 'bp-high';
+        if (diastolic >= 80) return 'bp-elevated';
         return 'bp-normal';
     }
 
@@ -41,25 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
             options: {
                 responsive: true, maintainAspectRatio: false,
                 scales: {
-                    // --- 核心修改：使用固定的、合理的Y轴范围 ---
-                    y: {
-                        min: 50,  // 血压Y轴最小值
-                        max: 180, // 血压Y轴最大值
-                        title: { display: true, text: '血压 (mmHg)' }
-                    },
-                    yPulse: {
-                        position: 'right',
-                        min: 40,  // 心率Y轴最小值
-                        max: 120, // 心率Y轴最大值
-                        title: { display: true, text: '心率 (次/分)' },
-                        grid: { drawOnChartArea: false },
-                    }
+                    y: { min: 50, max: 180, title: { display: true, text: '血压 (mmHg)' } },
+                    yPulse: { position: 'right', min: 40, max: 120, title: { display: true, text: '心率 (次/分)' }, grid: { drawOnChartArea: false }, }
                 },
                 plugins: {
+                    // --- 核心修改：分开绘制收缩压和舒张压的参考线 ---
                     annotation: {
                         annotations: {
-                            highBP: { type: 'line', yMin: 140, yMax: 140, borderColor: 'rgba(255, 99, 132, 0.8)', borderWidth: 2, borderDash: [6, 6], label: { content: '高血压', position: 'start', backgroundColor: 'rgba(255, 99, 132, 0.8)', color: 'white', font: { size: 10 } } },
-                            elevatedBP: { type: 'line', yMin: 130, yMax: 130, borderColor: 'rgba(255, 159, 64, 0.8)', borderWidth: 2, borderDash: [6, 6], label: { content: '较高血压', position: 'start', backgroundColor: 'rgba(255, 159, 64, 0.8)', color: 'white', font: { size: 10 } } }
+                            // 收缩压参考线
+                            systolicHigh: { type: 'line', yMin: 140, yMax: 140, borderColor: 'rgba(255, 99, 132, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '高压-高', position: 'end', backgroundColor: 'rgba(255, 99, 132, 0.5)', color: 'white', font: { size: 10 } } },
+                            systolicElevated: { type: 'line', yMin: 130, yMax: 130, borderColor: 'rgba(255, 159, 64, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '高压-较高', position: 'end', backgroundColor: 'rgba(255, 159, 64, 0.5)', color: 'white', font: { size: 10 } } },
+                            // 舒张压参考线
+                            diastolicHigh: { type: 'line', yMin: 90, yMax: 90, borderColor: 'rgba(54, 162, 235, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '低压-高', position: 'end', backgroundColor: 'rgba(54, 162, 235, 0.5)', color: 'white', font: { size: 10 } } },
+                            diastolicElevated: { type: 'line', yMin: 80, yMax: 80, borderColor: 'rgba(75, 192, 192, 0.5)', borderWidth: 2, borderDash: [6, 6], label: { content: '低压-较高', position: 'end', backgroundColor: 'rgba(75, 192, 192, 0.5)', color: 'white', font: { size: 10 } } }
                         }
                     }
                 }
@@ -81,11 +81,21 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 document.getElementById('chart-container').style.display = 'block';
             }
+
             data.forEach(record => {
                 const row = document.createElement('tr');
-                const levelClass = getBloodPressureLevel(record.systolic, record.diastolic);
-                row.classList.add(levelClass);
-                row.innerHTML = `<td>${record.dateTime}</td><td>${record.systolic}</td><td>${record.diastolic}</td><td>${record.pulse || 'N/A'}</td><td>${record.notes || ''}</td>`;
+                // --- 核心修改：独立判断每个单元格的颜色 ---
+                const systolicClass = getSystolicLevel(record.systolic);
+                const diastolicClass = getDiastolicLevel(record.diastolic);
+
+                // 使用模板字符串来构建表格行，并为单元格添加类
+                row.innerHTML = `
+                    <td>${record.dateTime}</td>
+                    <td class="${systolicClass}">${record.systolic}</td>
+                    <td class="${diastolicClass}">${record.diastolic}</td>
+                    <td>${record.pulse || 'N/A'}</td>
+                    <td>${record.notes || ''}</td>
+                `;
                 bpHistory.appendChild(row);
             });
             renderChart(data);
@@ -118,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(NETLIFY_FUNCTION_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application.json' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newRecord),
             });
             const result = await response.json();
