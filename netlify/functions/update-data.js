@@ -1,5 +1,5 @@
-// netlify/functions/update-data.js (完整代码)
-const { Octokit } = require("@octokit/rest");
+// netlify/functions/update-data.js (最终修复版)
+const { Octokit } = require("@octokit/rest"); // 确保这行代码在最上面，且完全正确
 
 // 定义 headers，用于允许来自 GitHub Pages 的跨域请求
 const headers = {
@@ -9,7 +9,6 @@ const headers = {
 };
 
 exports.handler = async function(event, context) {
-  // 响应浏览器的 OPTIONS "预检"请求
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers };
   }
@@ -18,31 +17,30 @@ exports.handler = async function(event, context) {
     return { statusCode: 405, headers, body: "Method Not Allowed" };
   }
 
-  // 从环境变量中同时获取 GITHUB_TOKEN 和 BP_PASSWORD
   const { GITHUB_TOKEN, BP_PASSWORD } = process.env;
 
   if (!GITHUB_TOKEN || !BP_PASSWORD) {
-    const missingVar = !GITHUB_TOKEN ? "GitHub Token" : "Blood Pressure Password";
+    const missingVar = !GITHUB_TOKEN ? "GitHub Token" : "Password";
     return { statusCode: 500, headers, body: JSON.stringify({ message: `服务器配置错误: ${missingVar} 未设置。` }) };
   }
   
-  const GITHUB_OWNER = 'LHaiC'; // 已根据你的截图自动填入
+  const GITHUB_OWNER = 'LHaiC';
   const GITHUB_REPO = "bp-tracker";
   const DATA_FILE_PATH = 'blood_pressure_data.json';
   
+  // 在这里创建 octokit 实例
+  const octokit = new Octokit({ auth: GITHUB_TOKEN });
+  
   const newRecord = JSON.parse(event.body);
 
-  // --- 新增: 密码验证逻辑 ---
   if (newRecord.password !== BP_PASSWORD) {
     return {
-      statusCode: 401, // 401 Unauthorized
+      statusCode: 401,
       headers,
       body: JSON.stringify({ message: "密码错误，禁止访问。" })
     };
   }
-  // --- 密码验证结束 ---
 
-  // 从记录中删除密码，我们绝不把密码存入JSON文件
   delete newRecord.password;
 
   try {
