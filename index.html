@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的血压记录 (BP Tracker)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>我的血压记录</h1>
+
+        <div id="form-container" class="card">
+            <h2>记录新的血压值</h2>
+            <form id="bp-form">
+                <div class="form-group">
+                    <label for="systolic">收缩压 (高压) [mmHg]</label>
+                    <input type="number" id="systolic" placeholder="例如: 120" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="diastolic">舒张压 (低压) [mmHg]</label>
+                    <input type="number" id="diastolic" placeholder="例如: 80" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pulse">心率 [次/分]</label>
+                    <input type="number" id="pulse" placeholder="例如: 75">
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">备注 (可选)</label>
+                    <textarea id="notes" rows="3" placeholder="例如: 早上起床后测量"></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn">保存记录</button>
+            </form>
+            <p id="status-message"></p>
+        </div>
+
+        <div id="data-container" class="card">
+            <h2>历史记录</h2>
+            <table id="bp-table">
+                <thead>
+                    <tr>
+                        <th>日期和时间</th>
+                        <th>收缩压</th>
+                        <th>舒张压</th>
+                        <th>心率</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody id="bp-history">
+                    <!-- 历史数据将在这里动态加载 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
