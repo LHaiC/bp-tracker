@@ -1,0 +1,14 @@
+{
+    "name": "bp-tracker-functions",
+    "version": "1.0.0",
+    "description": "Serverless functions for my blood pressure tracker",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@octokit/rest": "^21.0.1"
+    }
+  }
