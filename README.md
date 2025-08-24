@@ -21,15 +21,15 @@
 ```mermaid
 graph LR
     subgraph 浏览器
-        A[用户访问你的 GitHub Pages 网站]
+        A["用户访问你的 GitHub Pages 网站"]
     end
 
     subgraph Netlify 云服务
-        B[Netlify Function (API)]
+        B["Netlify Function (API)"]
     end
 
     subgraph 你的 GitHub 仓库
-        C[blood_pressure_data.json]
+        C["blood_pressure_data.json"]
     end
 
     A -- "1. 提交新数据(带密码)" --> B
@@ -97,7 +97,7 @@ graph LR
     *   点击 **"Save"**。
 
 3.  **重新部署**:
-    *   由于你刚刚在第4步提交了代码更新，Netlify 应该会自动开始一次新的部署。如果没有，可以去站点的 **"Deploys"** 页面，点击 **"Trigger deploy"** 下拉菜单 -> **"Deploy project without cache"**。(选项的文字可能会更新，选择清除缓存并部署的那个即可)
+    *   由于你刚刚在第4步提交了代码更新，Netlify 应该会自动开始一次新的部署。如果没有，可以去站点的 **"Deploys"** 页面，点击 **"Trigger deploy"** 下拉菜单 -> **"Deploy project without cache"**。
 
 ### 第 6 步：启用 GitHub Pages
 
