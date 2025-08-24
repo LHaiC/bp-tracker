@@ -16,7 +16,7 @@ button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
 #chart-container {
     position: relative;
     /* 我们不再固定高度，而是让它自适应，同时给一个最大高度 */
-    max-height: 400px; 
+    max-height: 1000px; 
     padding-bottom: 10px; /* 增加一点内边距，让图表底部有呼吸空间 */
 }
 
