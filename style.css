@@ -12,12 +12,12 @@ button:hover { background-color: #2980b9; }
 button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
 #status-message { text-align: center; margin-top: 15px; font-weight: bold; }
 
-/* --- 核心修改：修复图表高度溢出问题 --- */
 #chart-container {
-    position: relative; /* 这是一个好习惯，用于定位内部元素 */
-    height: 400px;      /* 我们给它一个固定的、合理的高度 */
-    padding: 15px;      /* 增加一些内边距，让图表有呼吸空间 */
-    overflow: hidden; 
+    position: relative;
+    width: 100%; /* 确保容器宽度是响应式的 */
+    aspect-ratio: 16 / 9; /* 设置一个 16:9 的黄金比例，你可以根据喜好调整为 2 / 1 等 */
+    padding: 15px;
+    box-sizing: border-box; /* 确保内边距不会影响最终尺寸 */
 }
 
 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
