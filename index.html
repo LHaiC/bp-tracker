@@ -1,13 +1,11 @@
-<!-- index.html (最终版) -->
+<!-- index.html (最终完美版) -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LHaiC的血压记录 (BP Tracker)</title>
-    <!-- 引入 Chart.js 图表库 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- 新增: 引入 Chart.js Annotation 插件，用于绘制参考线 -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,28 +14,14 @@
         <h1>LHaiC的血压记录</h1>
 
         <div id="form-container" class="card">
+            <!-- 表单内容保持不变... -->
             <h2>记录新的血压值</h2>
             <form id="bp-form">
-                <div class="form-group">
-                    <label for="systolic">收缩压 (高压) [mmHg]</label>
-                    <input type="number" id="systolic" placeholder="例如: 120" required>
-                </div>
-                <div class="form-group">
-                    <label for="diastolic">舒张压 (低压) [mmHg]</label>
-                    <input type="number" id="diastolic" placeholder="例如: 80" required>
-                </div>
-                <div class="form-group">
-                    <label for="pulse">心率 [次/分]</label>
-                    <input type="number" id="pulse" placeholder="例如: 75">
-                </div>
-                <div class="form-group">
-                    <label for="notes">备注 (可选)</label>
-                    <textarea id="notes" rows="3" placeholder="例如: 早上起床后测量"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="password">密码</label>
-                    <input type="password" id="password" placeholder="请输入密码以保存" required>
-                </div>
+                <div class="form-group"><label for="systolic">收缩压 (高压) [mmHg]</label><input type="number" id="systolic" placeholder="例如: 120" required></div>
+                <div class="form-group"><label for="diastolic">舒张压 (低压) [mmHg]</label><input type="number" id="diastolic" placeholder="例如: 80" required></div>
+                <div class="form-group"><label for="pulse">心率 [次/分]</label><input type="number" id="pulse" placeholder="例如: 75"></div>
+                <div class="form-group"><label for="notes">备注 (可选)</label><textarea id="notes" rows="3" placeholder="例如: 早上起床后测量"></textarea></div>
+                <div class="form-group"><label for="password">密码</label><input type="password" id="password" placeholder="请输入密码以保存" required></div>
                 <button type="submit" id="submit-btn">保存记录</button>
             </form>
             <p id="status-message"></p>
@@ -53,28 +37,33 @@
                 <h2>历史记录</h2>
                 <button id="refresh-btn">手动刷新</button>
             </div>
-            
-            <!-- 新增: 血压水平图例 -->
             <div id="legend-container">
                 <span class="legend-item"><span class="color-box bp-normal"></span> 正常</span>
                 <span class="legend-item"><span class="color-box bp-elevated"></span> 较高</span>
                 <span class="legend-item"><span class="color-box bp-high"></span> 高血压</span>
             </div>
-
             <table id="bp-table">
                 <thead>
-                    <tr>
-                        <th>日期和时间</th>
-                        <th>收缩压</th>
-                        <th>舒张压</th>
-                        <th>心率</th>
-                        <th>备注</th>
-                    </tr>
+                    <tr><th>日期和时间</th><th>收缩压</th><th>舒张压</th><th>心率</th><th>备注</th></tr>
                 </thead>
-                <tbody id="bp-history">
-                    <!-- 历史数据将在这里动态加载 -->
-                </tbody>
+                <tbody id="bp-history"></tbody>
             </table>
+        </div>
+
+        <!-- 新增: 血压和心率范围说明卡片 -->
+        <div class="card info-card">
+            <h3>参考标准</h3>
+            <p><strong>血压水平 (收缩压 / 舒张压):</strong></p>
+            <ul>
+                <li><strong>正常:</strong> 低于 130 / 80 mmHg</li>
+                <li><strong>较高:</strong> 130-139 / 80-89 mmHg</li>
+                <li><strong>高血压:</strong> 高于或等于 140 / 90 mmHg</li>
+            </ul>
+            <p><strong>静息心率:</strong></p>
+            <ul>
+                <li>成年人通常在 60-100 次/分钟 范围内。</li>
+            </ul>
+            <p class="disclaimer">注意：本站数据仅供个人参考，不能替代专业医疗建议。</p>
         </div>
     </div>
     <script src="script.js"></script>
