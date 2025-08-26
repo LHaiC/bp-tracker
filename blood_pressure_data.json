@@ -1,5 +1,12 @@
 [
   {
+    "systolic": 120,
+    "diastolic": 76,
+    "pulse": 88,
+    "notes": "",
+    "dateTime": "2025/8/26 19:43:45"
+  },
+  {
     "systolic": 119,
     "diastolic": 81,
     "pulse": 80,
